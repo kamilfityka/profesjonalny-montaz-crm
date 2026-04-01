@@ -1,0 +1,27 @@
+2. Jak dajemy komuś zadanie lub np zlecam Sebastianowi pomiar to to mi znika z mojej tablicy.
+CHcielibyśmy aby to zostało i na przykłąd niech się to odznacza na jakiś kolor lub jest skreślone
+oraz jak w comoveo można wysłąc sms powiadomienie
+
+3. Tak jak w comoveo chcemy exportowac baze danych na pdh
+
+5. Robimy komuś zadanie to my chcemy aby u nas w kalendarzu też było to zadanie ale było
+zaznaczone kolorem żółtym
+
+6. Jak wchodźmy i wpisujemy budowlańca to muszę mieć rubrykę do wpisania
+(zapis 2 nr telefonu -zmieńmy na Uwagi) i (zamiast strony wwwzmienić na  data ostatniego kontaktu)
+Tutaj chcielibyśmy aby można było generowac listę budowlańców jak w comoveo z tymi uwagami ?
+i kiedy mieliśy z nimi kontakt? edycja
+
+8. W procesach jak mamy Klienta to czy możemy zamienić : dtata zamknięcia ?
+na date podpisania umowy i że np. będe miała satystykę że w miesiacu marcu nasz
+dział handlowy podpisał 20 umow. To bardzo fajne edycja
+
+12. Czy jak mamy klienta w szansach sprzedazy to możemy dać nowe pole wpłącona zaliczkę ?
+i zaznaczamy tak lub nie
+
+14. W procesach jak Klient już jest skończony wrzucamy go na sam koniec ale żeby nie zrobiła
+nam się lista póniej w 100kach każdy po kolei  to dobrze by było aby wszyscy ci byli wkłądani
+do jednego pliku i jak klikam do mogę sobie to rozwinąć .nie ma w comoveo
+
+16. W reklamacjach tak jak w comoveo musze miec możliwośc exportowania listy do pdf
+np reklamacji przyjetych
