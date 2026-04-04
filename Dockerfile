@@ -30,25 +30,20 @@ RUN useradd -G www-data,root -u $uid -d /home/$user $user \
 
 WORKDIR /var/www
 
-# Kopiowanie zależności
-COPY composer.json composer.lock* ./
-RUN composer install --no-scripts --no-autoloader --no-dev
-
 # Kopiowanie kodu aplikacji
 COPY . .
 
-# Finalizacja Composer
-RUN composer dump-autoload --optimize \
-    && php artisan package:discover --ansi || true
-
-# Budowanie assetów
-RUN npm install && npm run production && rm -rf node_modules
-
 # Uprawnienia do storage i cache
-RUN chown -R $user:www-data storage bootstrap/cache \
+RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
+    && chown -R $user:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
+
+# Kopiowanie entrypoint
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER $user
 
 EXPOSE 9000
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["php-fpm"]
