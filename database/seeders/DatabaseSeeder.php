@@ -21,5 +21,7 @@ class DatabaseSeeder extends \Praust\Database\Seeders\PraustDatabaseSeeder
 
         $this->call(DocumentTypeSeeder::class);
         $this->call(DocumentSeeder::class);
+
+        $this->call(EmailTemplateSeeder::class);
     }
 }

@@ -1,7 +1,11 @@
 <?php namespace App\Models;
 
+use App\Models\Enums\FaultCategory;
 use App\Models\Enums\Priority;
+use App\Models\Enums\Urgency;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Praust\App\Models\Concerns\PraustAttachments;
 use Praust\App\Models\Concerns\PraustCategory;
 use Praust\App\Models\Fields\DateTime;
@@ -10,6 +14,7 @@ use Praust\App\Models\Fields\Select;
 use Praust\App\Models\Fields\TextInput;
 use Praust\App\Models\Fields\TextName;
 use Praust\App\Models\Fields\Tinymce;
+use Praust\App\Models\Fields\YesNo;
 use Praust\App\Models\PraustActionModel;
 
 /**
@@ -18,6 +23,13 @@ use Praust\App\Models\PraustActionModel;
  * @property array|mixed|string $text
  * @property mixed $address
  * @property mixed $phone
+ * @property bool $warranty
+ * @property string|null $purchase_date
+ * @property string|null $fault_description
+ * @property string|null $fault_category
+ * @property string $urgency
+ * @property bool $warranty_expired
+ * @property int|null $warranty_days_overdue
  */
 class Reclamation extends PraustActionModel
 {
@@ -29,9 +41,34 @@ class Reclamation extends PraustActionModel
 	public array $image = [];
 	public $fillable = [];
 
-    public function type(): belongsTo
+    public function type(): BelongsTo
     {
         return $this->belongsTo(ReclamationType::class);
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(ReclamationNote::class)->orderByDesc('created_at');
+    }
+
+    public function getWarrantyExpiredAttribute(): bool
+    {
+        if (!$this->purchase_date) {
+            return false;
+        }
+        return Carbon::parse($this->purchase_date)->addMonths(18)->isPast();
+    }
+
+    public function getWarrantyDaysOverdueAttribute(): ?int
+    {
+        if (!$this->purchase_date) {
+            return null;
+        }
+        $expiryDate = Carbon::parse($this->purchase_date)->addMonths(18);
+        if (!$expiryDate->isPast()) {
+            return null;
+        }
+        return (int) $expiryDate->diffInDays(now());
     }
 
     public function hasOrder(): bool
@@ -78,6 +115,11 @@ class Reclamation extends PraustActionModel
         $arr[] = DateTime::make("closed_at")->label('Data zamknięcia');
         $arr[] = Select::make("type_id")->label('Przyczyna')->options($info)->addSelectText();
         $arr[] = Radio::make("priority")->label('Priorytet')->options(Priority::array());
+        $arr[] = Radio::make("urgency")->label('Pilność')->options(Urgency::array());
+        $arr[] = YesNo::make("warranty")->label('Objęty gwarancją');
+        $arr[] = DateTime::make("purchase_date")->label('Data zakupu');
+        $arr[] = Tinymce::make("fault_description")->label('Szczegółowy opis usterki');
+        $arr[] = Radio::make("fault_category")->label('Kategoria usterki')->options(FaultCategory::array());
         $arr[] = Select::make("user_id")->label('Przypisz do')->options($users)->addSelectText('Brak')->enableSelect2();
         return $arr;
     }
