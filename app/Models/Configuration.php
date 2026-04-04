@@ -36,12 +36,14 @@ class Configuration extends PraustConfiguration
         static::addAdminTab($data, 'project_name', 'Zgłoszenia', 'reclamation');
         static::addAdminTab($data, 'project_name', 'Dokumenty', 'document');
         static::addAdminTab($data, 'project_name', 'Statystyki', 'statistic');
+        static::addAdminTab($data, 'project_name', 'Pomoc', 'help');
 
         static::addAdminTab($data, 'settings', 'Kalendarz', 'calendar-category');
         static::addAdminTab($data, 'settings', 'Procesy', 'process-type');
         static::addAdminTab($data, 'settings', 'Zgłoszenia', 'reclamation-type');
         static::addAdminTab($data, 'settings', 'Szanse sprzedaży', 'sale-type');
         static::addAdminTab($data, 'settings', 'Dokumenty', 'document-type');
+        static::addAdminTab($data, 'settings', 'Szablony e-maili', 'email-template');
         return $data;
     }
 }
