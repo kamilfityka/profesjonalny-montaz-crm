@@ -1,10 +1,12 @@
 #!/bin/sh
 set -e
 
-# Install PHP dependencies if vendor directory is missing
-if [ ! -d "vendor" ] || [ ! -f "vendor/autoload.php" ]; then
-    echo "Installing Composer dependencies..."
-    composer install --no-interaction
+# Install PHP dependencies only if vendor is not mounted from host
+if [ ! -f "vendor/autoload.php" ]; then
+    echo "vendor/autoload.php not found - attempting composer install..."
+    composer install --no-interaction || echo "WARNING: composer install failed. Mount vendor/ from server if using private packages."
+elif [ -f "vendor/autoload.php" ]; then
+    echo "Using mounted vendor directory."
 fi
 
 # Generate app key if not set
