@@ -17,8 +17,7 @@ fi
 # Run migrations if database is available
 php artisan migrate --force --no-interaction 2>/dev/null || true
 
-# Cache config
+# Cache config (route:cache excluded - Praust CMS registers duplicate dashboard route names)
 php artisan config:cache --no-interaction 2>/dev/null || true
-php artisan route:cache --no-interaction 2>/dev/null || true
 
 exec "$@"
