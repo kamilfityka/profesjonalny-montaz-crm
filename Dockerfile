@@ -45,5 +45,5 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 USER $user
 
 EXPOSE 9000
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
