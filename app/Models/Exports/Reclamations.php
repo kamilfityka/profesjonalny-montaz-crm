@@ -27,6 +27,10 @@ class Reclamations implements FromCollection, WithMapping, WithHeadings
             'Nr telefonu',
             'Co do zrobienia',
             'Data',
+            'Pilność',
+            'Gwarancja',
+            'Data zakupu',
+            'Kategoria usterki',
         ];
     }
 
@@ -39,6 +43,10 @@ class Reclamations implements FromCollection, WithMapping, WithHeadings
             $row->phone,
             strip_tags($row->text),
             $row->created_at->format("d-m-Y H:i:s"),
+            $row->urgency ?? 'Niepilne',
+            $row->warranty ? 'Tak' : 'Nie',
+            $row->purchase_date ? \Carbon\Carbon::parse($row->purchase_date)->format('d-m-Y') : '',
+            $row->fault_category ?? '',
         ];
     }
 }
