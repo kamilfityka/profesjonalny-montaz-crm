@@ -7,7 +7,7 @@
         "laravel"
     ],
     "repositories": [
-        { "type": "vcs", "url": "https://github.com/kacper55331/praust-cms" }
+        { "type": "vcs", "url": "https://github.com/kamilfityka/profesjonalny-montaz-crm-base" }
     ],
     "license": "MIT",
     "require": {
@@ -18,7 +18,7 @@
         "barryvdh/laravel-ide-helper": "^2.9",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "kacper55331/praust-cms": "^1.6",
+        "kamilfityka/profesjonalny-montaz-crm-base": "0.*",
         "laravel/framework": "^9.0",
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1"
