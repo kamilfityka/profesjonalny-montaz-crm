@@ -23,6 +23,7 @@ services:
       - DB_DATABASE=${DB_DATABASE:-crm}
       - DB_USERNAME=${DB_USERNAME:-crm_user}
       - DB_PASSWORD=${DB_PASSWORD:-secret}
+      - COMPOSER_AUTH=${COMPOSER_AUTH:-}
 
   nginx:
     image: nginx:alpine
