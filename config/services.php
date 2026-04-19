@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'wp_webhook' => [
+        'token' => env('WP_WEBHOOK_TOKEN'),
+        'pending_category_id' => env('WP_WEBHOOK_PENDING_CATEGORY_ID'),
+    ],
+
 ];

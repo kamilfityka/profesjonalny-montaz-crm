@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ReclamationController;
 use App\Http\Controllers\Admin\SaleController;
 
 app('router')->group(['middleware' => 'web'], function () {
@@ -17,7 +18,9 @@ app('router')->group(['middleware' => 'web'], function () {
         generateDefaultRoute('document-type');
         generateDefaultRoute('process');
         generateDefaultRoute('process-type');
-        generateDefaultRoute('reclamation');
+        generateDefaultRoute('reclamation', function() {
+            app('router')->get('/{id}/protocol-pdf', [ReclamationController::class, 'getProtocolPdf'])->name('reclamation-protocol-pdf');
+        });
         generateDefaultRoute('reclamation-type');
         generateDefaultRoute('monter');
         generateDefaultRoute('sale', function() {

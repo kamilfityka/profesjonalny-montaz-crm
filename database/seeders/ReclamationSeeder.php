@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Client;
 use App\Models\Enums\Priority;
+use App\Models\Enums\ReclamationSource;
+use App\Models\Enums\ResponsibilityCategory;
 use App\Models\Reclamation;
 use App\Models\ReclamationCategory;
 use App\Models\ReclamationType;
@@ -40,6 +42,11 @@ class ReclamationSeeder extends Seeder
             $model->closed_at = $faker->dateTimeBetween('now', '+1 month');
             $model->priority = $faker->randomKey(Priority::array());
             $model->text = $faker->paragraphs(asText: true);
+            $model->purchase_date = $faker->dateTimeBetween('-3 years', 'now');
+            $model->warranty = $faker->boolean();
+            $model->fault_description = $faker->paragraphs(2, asText: true);
+            $model->responsibility_category = $faker->randomKey(ResponsibilityCategory::array());
+            $model->source = ReclamationSource::MANUAL->value;
 
             $model->save();
 

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Admin;
 
+use App\Actions\GenerateReclamationProtocolPdf;
 use App\Http\Controllers\Admin\Concerns\User;
 use App\Models\Client;
 use App\Models\Exports\Clients;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\Response;
 
 class ReclamationController extends \Praust\App\Http\Controllers\Admin\PraustActionCategoryController
 {
@@ -50,5 +52,15 @@ class ReclamationController extends \Praust\App\Http\Controllers\Admin\PraustAct
         }
         $data = $data->get();
         return Excel::download(new Reclamations($data), Str::slug('reklamacje') . '.xlsx');
+    }
+
+    public function getProtocolPdf(Request $request, int $id, GenerateReclamationProtocolPdf $action): Response
+    {
+        $this->checkPermission($request, 'read');
+
+        /** @var Reclamation $reclamation */
+        $reclamation = (new Reclamation())->newQuery()->findOrFail($id);
+
+        return $action->execute($reclamation);
     }
 }
