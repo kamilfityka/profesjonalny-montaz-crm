@@ -240,4 +240,126 @@ public function getPdf($request, $id) // wzór: DocumentController::getPdf()
 | `Kernel.php` | Middleware API |
 | `config/services.php` | Token WP |
 
-Czy chcesz, żebym zaczął implementację od Feature 3 (rozszerzona karta sprawy)?
+---
+
+## STATUS IMPLEMENTACJI (2026-04-04)
+
+### WSZYSTKIE 9 FUNKCJONALNOŚCI ZOSTAŁO ZAIMPLEMENTOWANYCH
+
+---
+
+### FEATURE 3: Rozszerzona karta sprawy - ZAIMPLEMENTOWANE
+- [x] Migracja: `database/migrations/2026_04_04_000001_add_extended_fields_to_reclamations_table.php` (warranty, purchase_date, fault_description, fault_category, urgency)
+- [x] Enum: `app/Models/Enums/FaultCategory.php`
+- [x] Model `Reclamation.php` — dodane pola: YesNo(warranty), DateTime(purchase_date), Tinymce(fault_description), Radio(fault_category)
+- [x] Seeder: `ReclamationSeeder.php` — zaktualizowany o nowe pola
+
+### FEATURE 2: Pole pilności - ZAIMPLEMENTOWANE
+- [x] Enum: `app/Models/Enums/Urgency.php` (Pilne / Niepilne)
+- [x] Kolumna `urgency` w migracji Feature 3 (ta sama migracja)
+- [x] Model: Radio(urgency) dodane do `fields()`
+- [x] Kanban: `kanban.blade.php` — klasa `task-urgent` (czerwona ramka) + badge "PILNE"
+- [x] Export: `Reclamations.php` — dodane kolumny: Pilność, Gwarancja, Data zakupu, Kategoria usterki
+
+### FEATURE 6: System notatek z logiem zdarzeń - ZAIMPLEMENTOWANE
+- [x] Migracja: `database/migrations/2026_04_04_000002_create_reclamation_notes_table.php`
+- [x] Model: `app/Models/ReclamationNote.php`
+- [x] Serwis: `app/Services/ReclamationLogger.php`
+- [x] Relacja: `Reclamation::notes()` HasMany
+- [x] Kontroler: `ReclamationController::postNote()` + auto-logging w `afterStore` / `afterUpdate`
+- [x] Route: `POST /{id}/note` (reclamation-note)
+- [x] Widok: `resources/views/admin/reclamation/partials/notes.blade.php` — timeline z formularzem
+
+### FEATURE 5: Podgląd załączników inline - ZAIMPLEMENTOWANE
+- [x] Widok: `resources/views/admin/reclamation/partials/attachments-preview.blade.php`
+- [x] Obrazy: miniaturka + Bootstrap modal lightbox
+- [x] Wideo: `<video controls>`
+- [x] Inne pliki: link do pobrania
+- [x] Integracja: osadzone w `edit.blade.php`
+
+### FEATURE 4: Logika 18 miesięcy - ZAIMPLEMENTOWANE
+- [x] Accessory: `getWarrantyExpiredAttribute()` i `getWarrantyDaysOverdueAttribute()` w `Reclamation.php`
+- [x] Widok: `resources/views/admin/reclamation/partials/warranty-alert.blade.php`
+- [x] Alert czerwony (wygasła) z przyciskiem "Wyślij e-mail o odrzuceniu"
+- [x] Alert zielony (aktywna) z informacją ile dni pozostało
+
+### FEATURE 7: Szablony e-maili - ZAIMPLEMENTOWANE
+- [x] Migracja: `database/migrations/2026_04_04_000003_create_email_templates_table.php`
+- [x] Model: `app/Models/EmailTemplate.php` (PraustActionModel z fields())
+- [x] Seeder: `database/seeders/EmailTemplateSeeder.php` — 5 szablonów
+- [x] Mailable: `app/Mail/ReclamationEmail.php`
+- [x] Widok e-mail: `resources/views/emails/reclamation.blade.php`
+- [x] Kontroler: `getEmailTemplates()` + `postSendEmail()` w ReclamationController
+- [x] Panel: `resources/views/admin/reclamation/partials/email-panel.blade.php` — historia + modal wysyłki
+- [x] Admin szablonów: `EmailTemplateController.php`, route `email-template`, zakładka w Configuration
+
+### FEATURE 1: Integracja WordPress → CRM - ZAIMPLEMENTOWANE
+- [x] API route: `routes/api.php` — `POST /api/reclamation` z throttle
+- [x] Middleware: `app/Http/Middleware/VerifyApiToken.php` — Bearer token
+- [x] Config: `config/services.php` — sekcja `wordpress.api_token` (env: WORDPRESS_API_TOKEN)
+- [x] Kontroler: `app/Http/Controllers/Api/ReclamationApiController.php`
+- [x] Migracja: `2026_04_04_000004_add_verification_reclamation_category.php` — kategoria "Oczekuje na weryfikację"
+
+### FEATURE 8: Generowanie PDF - ZAIMPLEMENTOWANE
+- [x] Widok: `resources/views/admin/reclamation/pdf.blade.php` (font Maisonneue, styl jak document/pdf)
+- [x] Kontroler: `ReclamationController::getPdf()`
+- [x] Route: `GET /pdf/{id}` (reclamation-pdf)
+- [x] Przycisk: w `edit.blade.php` obok tytułu sprawy
+
+### FEATURE 9: Dokumentacja użytkownika - ZAIMPLEMENTOWANE
+- [x] Kontroler: `app/Http/Controllers/Admin/HelpController.php`
+- [x] Widok: `resources/views/admin/help/index.blade.php` — pełna instrukcja wszystkich funkcji
+- [x] Route: `/help` w `web.php`
+- [x] Menu: zakładka "Pomoc" dodana do `Configuration.php`
+
+---
+
+### Podsumowanie utworzonych plików
+
+| Nowy plik | Feature |
+|---|---|
+| `database/migrations/2026_04_04_000001_add_extended_fields_to_reclamations_table.php` | 2, 3 |
+| `database/migrations/2026_04_04_000002_create_reclamation_notes_table.php` | 6 |
+| `database/migrations/2026_04_04_000003_create_email_templates_table.php` | 7 |
+| `database/migrations/2026_04_04_000004_add_verification_reclamation_category.php` | 1 |
+| `app/Models/Enums/FaultCategory.php` | 3 |
+| `app/Models/Enums/Urgency.php` | 2 |
+| `app/Models/ReclamationNote.php` | 6 |
+| `app/Models/EmailTemplate.php` | 7 |
+| `app/Services/ReclamationLogger.php` | 6 |
+| `app/Http/Controllers/Api/ReclamationApiController.php` | 1 |
+| `app/Http/Controllers/Admin/EmailTemplateController.php` | 7 |
+| `app/Http/Controllers/Admin/HelpController.php` | 9 |
+| `app/Http/Middleware/VerifyApiToken.php` | 1 |
+| `app/Mail/ReclamationEmail.php` | 7 |
+| `database/seeders/EmailTemplateSeeder.php` | 7 |
+| `resources/views/admin/reclamation/edit.blade.php` | 3-8 |
+| `resources/views/admin/reclamation/partials/notes.blade.php` | 6 |
+| `resources/views/admin/reclamation/partials/attachments-preview.blade.php` | 5 |
+| `resources/views/admin/reclamation/partials/warranty-alert.blade.php` | 4 |
+| `resources/views/admin/reclamation/partials/email-panel.blade.php` | 7 |
+| `resources/views/admin/reclamation/pdf.blade.php` | 8 |
+| `resources/views/admin/help/index.blade.php` | 9 |
+| `resources/views/emails/reclamation.blade.php` | 7 |
+
+### Zmodyfikowane pliki
+
+| Plik | Zmiany |
+|---|---|
+| `app/Models/Reclamation.php` | Nowe pola, relacja notes(), accessory warranty |
+| `app/Http/Controllers/Admin/ReclamationController.php` | postNote, getPdf, getEmailTemplates, postSendEmail, auto-logging |
+| `routes/web.php` | Callback reclamation, email-template, help |
+| `routes/api.php` | Endpoint WordPress |
+| `app/Models/Configuration.php` | Zakładki: Pomoc, Szablony e-maili |
+| `resources/views/admin/reclamation/category/partials/kanban.blade.php` | task-urgent, badge PILNE |
+| `app/Models/Exports/Reclamations.php` | Nowe kolumny exportu |
+| `database/seeders/ReclamationSeeder.php` | Nowe pola faker |
+| `database/seeders/DatabaseSeeder.php` | EmailTemplateSeeder |
+| `config/services.php` | wordpress.api_token |
+
+### Po wdrożeniu należy wykonać
+```bash
+php artisan migrate
+php artisan db:seed --class=EmailTemplateSeeder
+# Ustawić w .env: WORDPRESS_API_TOKEN=twoj-tajny-token
+```
